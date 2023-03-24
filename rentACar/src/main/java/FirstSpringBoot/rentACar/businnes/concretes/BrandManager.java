@@ -2,7 +2,9 @@ package FirstSpringBoot.rentACar.businnes.concretes;
 
 import FirstSpringBoot.rentACar.businnes.abstracts.BrandService;
 import FirstSpringBoot.rentACar.businnes.requests.CreateBrandRequest;
+import FirstSpringBoot.rentACar.businnes.requests.UpdateBrandRequest;
 import FirstSpringBoot.rentACar.businnes.responses.GetAllBrandsResponse;
+import FirstSpringBoot.rentACar.businnes.responses.GetByIdResponse;
 import FirstSpringBoot.rentACar.core.utilities.mappers.ModelMapperService;
 import FirstSpringBoot.rentACar.dataAcces.abstracts.BrandRepository;
 import FirstSpringBoot.rentACar.entities.concretes.Brand;
@@ -45,5 +47,25 @@ public class BrandManager implements BrandService {
         Brand brand = modelMapperService.forRequest().map(brandRequest,Brand.class);
 
         this.brandRepository.save(brand);
+    }
+
+    @Override
+    public GetByIdResponse getById(int id) {
+
+        Brand brand = this.brandRepository.findById(id).orElseThrow();
+        GetByIdResponse byIdResponse = this.modelMapperService.forResponse().map(brand,GetByIdResponse.class);
+
+        return byIdResponse;
+    }
+
+    @Override
+    public void update(UpdateBrandRequest updateBrandRequest) {
+        Brand brand = modelMapperService.forRequest().map(updateBrandRequest,Brand.class);
+        this.brandRepository.save(brand);
+    }
+
+    @Override
+    public void delete(int id) {
+        this.brandRepository.deleteById(id);
     }
 }
