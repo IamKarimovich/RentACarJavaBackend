@@ -34,7 +34,7 @@ public class BrandsController {
     }
 
     @PutMapping
-    public void update(@RequestBody UpdateBrandRequest brandRequest)
+    public void update(@RequestBody @Valid UpdateBrandRequest brandRequest)
     {
         this.brandService.update(brandRequest);
     }
@@ -47,7 +47,7 @@ public class BrandsController {
 
     @PostMapping()
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void addBrand(@RequestBody @Valid CreateBrandRequest brandRequest){
+    public void addBrand(@RequestBody @Valid CreateBrandRequest brandRequest) {
         brandService.add(brandRequest);
     }
 
