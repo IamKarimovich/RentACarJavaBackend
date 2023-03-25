@@ -5,6 +5,7 @@ import FirstSpringBoot.rentACar.businnes.requests.CreateBrandRequest;
 import FirstSpringBoot.rentACar.businnes.requests.UpdateBrandRequest;
 import FirstSpringBoot.rentACar.businnes.responses.GetAllBrandsResponse;
 import FirstSpringBoot.rentACar.businnes.responses.GetByIdResponse;
+import FirstSpringBoot.rentACar.businnes.rules.BrandBusinessRules;
 import FirstSpringBoot.rentACar.core.utilities.mappers.ModelMapperService;
 import FirstSpringBoot.rentACar.dataAcces.abstracts.BrandRepository;
 import FirstSpringBoot.rentACar.entities.concretes.Brand;
@@ -21,10 +22,12 @@ public class BrandManager implements BrandService {
     private BrandRepository brandRepository;
     private ModelMapperService modelMapperService;
 
+    private BrandBusinessRules brandBusinessRules;
     @Autowired
-    public BrandManager(BrandRepository brandRepository, ModelMapperService modelMapperService) {
+    public BrandManager(BrandRepository brandRepository, ModelMapperService modelMapperService,BrandBusinessRules brandBusinessRules) {
         this.brandRepository = brandRepository;
         this.modelMapperService = modelMapperService;
+        this.brandBusinessRules = brandBusinessRules;
     }
 
 
@@ -44,6 +47,9 @@ public class BrandManager implements BrandService {
 
     @Override
     public void add(CreateBrandRequest brandRequest) {
+
+        this.brandBusinessRules.checkIfBrandNameExists(brandRequest.getName());
+
         Brand brand = modelMapperService.forRequest().map(brandRequest,Brand.class);
 
         this.brandRepository.save(brand);
